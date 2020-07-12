@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import TaskManager from "./TaskManager";
+import CardHeader from "./CardHeader";
+import Heading from "./Heading";
 
 class App extends Component {
   state = {
@@ -13,7 +16,7 @@ class App extends Component {
     this.setState({
       currentWork: {
         work: e.target.value,
-        kry: Date.now(),
+        key: Date.now(),
       },
     });
   }
@@ -43,68 +46,28 @@ class App extends Component {
   };
 
   render() {
+    const count = this.state.works.length;
     return (
       <React.Fragment>
-        <h1
-          className="text-white text-center"
-          style={{
-            maxWidth: "38rem",
-            margin: "10rem auto 2rem",
-            fontWeight: "bold",
-          }}
-        >
-          ToDo List
-        </h1>
+        <Heading />
         <div
           className="card text-white bg-info mb-3"
           style={{ maxWidth: "38rem", margin: "auto" }}
         >
-          <div className="card-header">
-            <form onSubmit={this.addWork.bind(this)}>
-              <div className="form-group">
-                <label>What do you want to do</label>
-                <input
-                  type="text"
-                  value={this.state.currentWork.work}
-                  className="form-control"
-                  placeholder="Add a task"
-                  style={{ maxWidth: "28rem", display: "inline-block" }}
-                  onChange={this.handleChange.bind(this)}
-                />
-                <button
-                  type="submit"
-                  value="Submit"
-                  className="btn btn-light"
-                  style={{ margin: "0 0 1% 5%" }}
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
+          <CardHeader
+            addWork={this.addWork.bind(this)}
+            value={this.state.currentWork.work}
+            handleChange={this.handleChange.bind(this)}
+          />
           <div className="card-body">
-            <h5 className="card-title">Your pending tasks:</h5>
-            {this.state.works.map((work, index) => (
-              <React.Fragment key={index}>
-                <p
-                  className="card-text"
-                  style={{
-                    minWidth: "80%",
-                    maxWidth: "80%",
-                    display: "inline-block",
-                  }}
-                >
-                  {work}
-                </p>
-                <button
-                  className="btn btn-danger"
-                  style={{ margin: "0 0 0 5%" }}
-                  onClick={() => this.handleDelete(index)}
-                >
-                  Delete
-                </button>
-              </React.Fragment>
-            ))}
+            <h5 className="card-title">
+              You have {count === 0 ? "no" : count} tasks to do
+              {count === 0 ? "." : ":"}
+            </h5>
+            <TaskManager
+              works={this.state.works}
+              handleDelete={this.handleDelete}
+            />
           </div>
         </div>
       </React.Fragment>
